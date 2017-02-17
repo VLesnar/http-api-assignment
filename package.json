@@ -1,0 +1,26 @@
+{
+  "name": "http_api_hw",
+  "version": "1.0.0",
+  "description": "HTTP API Homework",
+  "main": "server.js",
+  "scripts": {
+	"start": "node ./src/server.js",
+  	"pretest": "eslint ./src --fix",
+  	"test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VLesnar/http-api-assignment.git"
+  },
+  "author": "Veronica Lesnar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VLesnar/http-api-assignment/issues"
+  },
+  "homepage": "https://github.com/VLesnar/http-api-assignment#readme",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}

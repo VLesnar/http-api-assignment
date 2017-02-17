@@ -6,7 +6,113 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+	const content = document.querySelector("#content");
+	
+	const h1 = document.createElement('h1');
+	const p = document.createElement('p');
+	const parseType = (xhr, header) => {
+		const type = xhr.getResponseHeader('content-type');
+		h1.textContent = header;
+		if(type === 'application/json') {
+			const obj = JSON.parse(xhr.response);
+			p.textContent = `Message: ${obj.message}`
+			console.log(obj);
+		}
+		else if(type === 'text/xml') {
+			const message = xhr.responseXML.querySelector('message').textContent;
+			p.textContent = `Message: ${message}`;
+			console.log(xhr.responseXML);
+		}
+				
+		content.appendChild(h1);
+		content.appendChild(p);
+	};
 
+	const handleResponse = (xhr) => {
+		
+		//const content = document.querySelector("#content");
+
+		switch(xhr.status) {
+			case 200:	// success
+				parseType(xhr, 'Success');
+				break;
+			case 400:	// badRequest
+				parseType(xhr, 'Bad Request');
+				break;
+			case 401:	// unauthorized
+				parseType(xhr, 'Unauthorized');
+				break;
+			case 403:	// forbidden
+				parseType(xhr, 'Forbidden');
+				break;
+			case 500:	// internal
+				parseType(xhr, 'Internal Server Error');
+				break;
+			case 501:	// notImplemented
+				parseType(xhr, 'Not Implemented');
+				break;
+			case 404:	// notFound
+				parseType(xhr, 'Resource Not Found');
+				break;
+		}
+	};
+
+	const sendAjax = (url, acceptedType) => {
+		const xhr = new XMLHttpRequest();
+		
+		xhr.open('GET', url);
+		xhr.setRequestHeader("Accept", acceptedType);
+		xhr.onload = () => handleResponse(xhr);
+		xhr.send();
+	};
+	
+	const init = () => {
+		const sendButton = document.querySelector("#send");
+		const codeDrop = document.querySelector("#page");
+		const typeDrop = document.querySelector("#type");
+		let response = null;
+		let code = "/success";
+		let type = "application/json"
+		
+		codeDrop.addEventListener('change', function() {
+			code = codeDrop.value;
+		});
+		
+		typeDrop.addEventListener('change', function () {
+			type = typeDrop.value;
+		});
+		
+		sendButton.addEventListener('click', function() {
+			switch (codeDrop.value) {
+			case "/success":
+				sendAjax(codeDrop.value, typeDrop.value);
+				break;
+			case "/badRequest":
+				sendAjax(code, type);
+				break;
+			case "/unauthorized":
+				sendAjax(code, type);
+				break;
+			case "/forbidden":
+				sendAjax(code, type);
+				break;
+			case "/internal":
+				sendAjax(code, type);
+				break;
+			case "/notImplemented":
+				sendAjax(code, type);
+				break;
+			case "/notFound":
+				sendAjax(code, type);
+				break;
+			default:
+				sendAjax('/success', 'application/json');
+				break;
+			}
+		});
+	};
+
+	window.onload = init;
   </script>
 </head>
 <body>
